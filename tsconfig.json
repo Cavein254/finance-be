@@ -20,6 +20,7 @@
   "exclude": [
     "node_modules",                    // Exclude `node_modules` folder
     "dist",                             // Exclude compiled output
-    "tests/**.test.ts"                            // Exclude test files
-  ]
+    "tests/**.test.ts",
+    "src/generated/graphql.ts"                           // Exclude test files
+  ],
 }

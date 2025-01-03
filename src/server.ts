@@ -7,12 +7,12 @@ import logger from './logger/Logger'
 const typeDefs = readFileSync('./src/graphql/schema.graphql', 'utf8')
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
 })
 
 const startServer = async () => {
   const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 }
+    listen: { port: 4000 },
   })
   logger.info(`Server ready at ${url}`)
 }

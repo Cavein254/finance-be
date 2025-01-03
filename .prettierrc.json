@@ -12,8 +12,8 @@
     "insertPragma": false,
     "requirePragma": false,
     "quoteProps": "as-needed",
-    "trailingComma": "none",
-    "parser": "babel",
+    "trailingComma": "es5",
+    "parser": "typescript",
     "jsxSingleQuote": false,
     "vueIndentScriptAndStyle": false
   }

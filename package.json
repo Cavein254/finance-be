@@ -8,7 +8,8 @@
     "prettier-format": "prettier --config .prettierrc.json 'src/**/*.ts' 'test/**/*.ts' --write || true",
     "test": "jest --passWithNoTests",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate": "graphql-codegen"
   },
   "keywords": [
     "finance",
@@ -19,7 +20,10 @@
   "description": "",
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.3",
+    "@graphql-codegen/typescript-resolvers": "^4.4.1",
     "@types/node": "^22.10.5",
+    "@typescript-eslint/eslint-plugin": "^8.19.0",
+    "@typescript-eslint/parser": "^8.19.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",

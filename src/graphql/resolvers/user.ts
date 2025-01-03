@@ -1,7 +1,7 @@
 const userResolvers = {
   Query: {
-    hello: () => 'Hello world!'
-  }
+    hello: () => 'Hello world!',
+  },
 }
 
 export default userResolvers

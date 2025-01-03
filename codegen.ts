@@ -1,11 +1,16 @@
 import type { CodegenConfig } from '@graphql-codegen/cli'
  
 const config: CodegenConfig = {
-   schema: 'https://localhost:4000/graphql',
-   documents: ['src/**/*.ts'],
+   schema: './src/graphql/schema.graphql',
    generates: {
-      './src/gql/': {
-        preset: 'client',
+      './src/generated/graphql.ts': {
+         config:{
+            useIndexSignature: true
+         },
+         plugins: [
+            'typescript',
+            'typescript-resolvers',
+         ]
       }
    }
 }

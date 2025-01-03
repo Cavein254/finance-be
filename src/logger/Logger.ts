@@ -7,22 +7,22 @@ const transport = pino.transport({
       options: {
         destination: './logs/output.log',
         mkdir: true,
-        colorize: false
-      }
+        colorize: false,
+      },
     },
     {
       target: 'pino-pretty',
       options: {
         destination: process.stdout.fd,
-        colorize: true
-      }
-    }
-  ]
+        colorize: true,
+      },
+    },
+  ],
 })
 
 const logger = pino(
   {
-    level: 'info'
+    level: 'info',
   },
   transport
 )
