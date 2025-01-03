@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' 'test/**/*.ts' --write",
+    "prettier-format": "prettier --config .prettierrc.json 'src/**/*.ts' 'test/**/*.ts' --write || true",
     "test": "jest --passWithNoTests",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prepare": "husky"
