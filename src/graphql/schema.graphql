@@ -9,7 +9,7 @@ type Query {
 
 type StockError {
     success:Boolean!
-    error:String!
+    error:String
 }
 
 type DailyStockData {
@@ -25,4 +25,5 @@ union StockDataUnion = StockError | DailyStockData
 type GetStockDataResponse {
     success:Boolean!
     data: StockDataUnion
+    error:String
 }

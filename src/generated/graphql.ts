@@ -30,6 +30,7 @@ export type DailyStockData = {
 export type GetStockDataResponse = {
   __typename?: 'GetStockDataResponse';
   data?: Maybe<StockDataUnion>;
+  error?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
 };
 
@@ -48,7 +49,7 @@ export type StockDataUnion = DailyStockData | StockError;
 
 export type StockError = {
   __typename?: 'StockError';
-  error: Scalars['String']['output'];
+  error?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
 };
 
@@ -161,6 +162,7 @@ export type DailyStockDataResolvers<ContextType = any, ParentType extends Resolv
 
 export type GetStockDataResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetStockDataResponse'] = ResolversParentTypes['GetStockDataResponse']> = ResolversObject<{
   data?: Resolver<Maybe<ResolversTypes['StockDataUnion']>, ParentType, ContextType>;
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -179,7 +181,7 @@ export type StockDataUnionResolvers<ContextType = any, ParentType extends Resolv
 }>;
 
 export type StockErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockError'] = ResolversParentTypes['StockError']> = ResolversObject<{
-  error?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

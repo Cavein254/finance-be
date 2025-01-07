@@ -1,9 +1,13 @@
 import { getDailyData } from '../../utils/helpers'
 import logger from '../../logger/Logger'
+import { GetStockDataResponse } from '../../generated/graphql'
 
 const StockResolvers = {
   Query: {
-    getStockData: async (_parent: any, { symbol }) => {
+    getStockData: async (
+      _parent: any,
+      { symbol }
+    ): Promise<GetStockDataResponse> => {
       try {
         const data: any = await getDailyData(symbol)
         if (data['Error Message']) {
@@ -13,7 +17,7 @@ const StockResolvers = {
         return { success: true, data: data['Time Series (Daily)'] }
       } catch (error) {
         logger.error(error)
-        return { success: false, error }
+        return { success: false, error: JSON.stringify(error) }
       }
     },
   },
