@@ -1,13 +1,11 @@
 scalar JSON
+
+
 type Query {
     hello:String!
     getStockData(symbol:String!):JSON!
 }
 
-type GetStockDataResponse {
-    success:Boolean!
-    data: Stock | DailyStockData
-}
 
 type StockError {
     success:Boolean!
@@ -20,4 +18,11 @@ type DailyStockData {
   low: String
   close: String
   volume: String
+}
+
+union StockDataUnion = StockError | DailyStockData
+
+type GetStockDataResponse {
+    success:Boolean!
+    data: StockDataUnion
 }
