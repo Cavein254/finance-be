@@ -6,7 +6,6 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -29,28 +28,26 @@ export type DailyStockData = {
 
 export type GetStockDataResponse = {
   __typename?: 'GetStockDataResponse';
-  data?: Maybe<StockDataUnion>;
+  data?: Maybe<DailyStockData>;
   error?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  getStockData: Scalars['JSON']['output'];
+  getTimeSeriesDaily: GetStockDataResponse;
+  getTimeSeriesWeekly: GetStockDataResponse;
   hello: Scalars['String']['output'];
 };
 
 
-export type QueryGetStockDataArgs = {
+export type QueryGetTimeSeriesDailyArgs = {
   symbol: Scalars['String']['input'];
 };
 
-export type StockDataUnion = DailyStockData | StockError;
 
-export type StockError = {
-  __typename?: 'StockError';
-  error?: Maybe<Scalars['String']['output']>;
-  success: Scalars['Boolean']['output'];
+export type QueryGetTimeSeriesWeeklyArgs = {
+  symbol: Scalars['String']['input'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -121,21 +118,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-/** Mapping of union types */
-export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = ResolversObject<{
-  StockDataUnion: ( DailyStockData ) | ( StockError );
-}>;
 
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   DailyStockData: ResolverTypeWrapper<DailyStockData>;
-  GetStockDataResponse: ResolverTypeWrapper<Omit<GetStockDataResponse, 'data'> & { data?: Maybe<ResolversTypes['StockDataUnion']> }>;
+  GetStockDataResponse: ResolverTypeWrapper<GetStockDataResponse>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Query: ResolverTypeWrapper<{}>;
-  StockDataUnion: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['StockDataUnion']>;
-  StockError: ResolverTypeWrapper<StockError>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 }>;
 
@@ -143,11 +134,9 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
   DailyStockData: DailyStockData;
-  GetStockDataResponse: Omit<GetStockDataResponse, 'data'> & { data?: Maybe<ResolversParentTypes['StockDataUnion']> };
+  GetStockDataResponse: GetStockDataResponse;
   JSON: Scalars['JSON']['output'];
   Query: {};
-  StockDataUnion: ResolversUnionTypes<ResolversParentTypes>['StockDataUnion'];
-  StockError: StockError;
   String: Scalars['String']['output'];
 }>;
 
@@ -161,7 +150,7 @@ export type DailyStockDataResolvers<ContextType = any, ParentType extends Resolv
 }>;
 
 export type GetStockDataResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetStockDataResponse'] = ResolversParentTypes['GetStockDataResponse']> = ResolversObject<{
-  data?: Resolver<Maybe<ResolversTypes['StockDataUnion']>, ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes['DailyStockData']>, ParentType, ContextType>;
   error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -172,18 +161,9 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  getStockData?: Resolver<ResolversTypes['JSON'], ParentType, ContextType, RequireFields<QueryGetStockDataArgs, 'symbol'>>;
+  getTimeSeriesDaily?: Resolver<ResolversTypes['GetStockDataResponse'], ParentType, ContextType, RequireFields<QueryGetTimeSeriesDailyArgs, 'symbol'>>;
+  getTimeSeriesWeekly?: Resolver<ResolversTypes['GetStockDataResponse'], ParentType, ContextType, RequireFields<QueryGetTimeSeriesWeeklyArgs, 'symbol'>>;
   hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-}>;
-
-export type StockDataUnionResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockDataUnion'] = ResolversParentTypes['StockDataUnion']> = ResolversObject<{
-  __resolveType: TypeResolveFn<'DailyStockData' | 'StockError', ParentType, ContextType>;
-}>;
-
-export type StockErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockError'] = ResolversParentTypes['StockError']> = ResolversObject<{
-  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
@@ -191,7 +171,5 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   GetStockDataResponse?: GetStockDataResponseResolvers<ContextType>;
   JSON?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
-  StockDataUnion?: StockDataUnionResolvers<ContextType>;
-  StockError?: StockErrorResolvers<ContextType>;
 }>;
 

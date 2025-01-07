@@ -4,7 +4,12 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const apiKey = process.env.ALPHA_VANTAGE_API_KEY
-export const getDailyData = async (symbol: string) => {
+export const getTimeSeriesDaily = async (symbol: string) => {
+  /*
+   * This function retutns the HLOC TIME_SERIES_DAILY
+   * of a stock provided the symbol e.g IBM
+   * for the past 100 days
+   */
   const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}`
   return new Promise((resolve, reject) => {
     request.get(
@@ -15,8 +20,10 @@ export const getDailyData = async (symbol: string) => {
       },
       (err, res, data) => {
         if (err) {
+          console.log(err)
           reject(err)
         } else if (res.statusCode !== 200) {
+          console.log(`Status Code: ${res.statusCode}`)
           reject(new Error(`Status Code: ${res.statusCode}`))
         } else {
           resolve(data)
@@ -26,8 +33,13 @@ export const getDailyData = async (symbol: string) => {
   })
 }
 
-export const getSingleDailyData = async (symbol: string) => {
-  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=demo`
+export const getTimeSeriesWeekly = async (symbol: string) => {
+  /*
+   * This function retutns the HLOC TIME_SERIES_WEEKLY
+   * of a stock provided the symbol e.g IBM
+   * for 20+ years
+   */
+  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${symbol}&apikey=demo`
   const response = await request.get(
     {
       url,
