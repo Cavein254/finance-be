@@ -3,3 +3,21 @@ type Query {
     hello:String!
     getStockData(symbol:String!):JSON!
 }
+
+type GetStockDataResponse {
+    success:Boolean!
+    data: Stock | DailyStockData
+}
+
+type StockError {
+    success:Boolean!
+    error:String!
+}
+
+type DailyStockData {
+  open: String
+  high: String
+  low: String
+  close: String
+  volume: String
+}
