@@ -4,11 +4,12 @@ scalar JSON
 type Query {
     hello:String!
     getTimeSeriesDaily(symbol:String!):GetStockDataResponse
-    getTimeSeriesWeekly(symbol:String!):GetStockDataResponse!
+    getTimeSeriesWeekly(symbol:String!):GetStockDataResponse
+    getNewsSentiment(symbol:String!):GetNewsSentimentResponse
 }
 
 
-type DailyStockData {
+type StockData {
   date: String
   open: String
   high: String
@@ -19,6 +20,24 @@ type DailyStockData {
 
 type GetStockDataResponse {
     success:Boolean!
-    data: [DailyStockData]
+    data: [StockData]
     error:String
+}
+
+
+type GetNewsSentimentResponse {
+    success:Boolean!
+    data: [NewsSentiment]
+    error:String
+}
+
+type NewsSentiment {
+  title: String
+  url: String
+  authors:[String]
+  time_published: String
+  summary: String
+  banner_image: String
+  overall_sentiment_score:String
+  verall_sentiment_label:String
 }

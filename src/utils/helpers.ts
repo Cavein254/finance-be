@@ -40,22 +40,53 @@ export const getTimeSeriesWeekly = async (symbol: string) => {
    * of a stock provided the symbol e.g IBM
    * for 20+ years
    */
-  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${symbol}&apikey=demo`
-  const response = await request.get(
-    {
-      url,
-      json: true,
-      headers: { 'User-Agent': 'request' },
-    },
-    (err, res, data) => {
-      if (err) {
-        return { err }
+  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${symbol}&apikey=${apiKey}`
+  return new Promise((resolve, reject) => {
+    request.get(
+      {
+        url,
+        json: true,
+        headers: { 'User-Agent': 'request' },
+      },
+      (err, res, data) => {
+        if (err) {
+          logger.error(err)
+          reject(err)
+        } else if (res.statusCode !== 200) {
+          logger.error(`Status Code: ${res.statusCode}`)
+          reject(new Error(`Status Code: ${res.statusCode}`))
+        } else {
+          resolve(data)
+        }
       }
-      if (res.statusCode !== 200) {
-        return { Status: res.statusCode }
+    )
+  })
+}
+
+export const getNewsSentiment = async (symbol: string) => {
+  /*
+   * This function retutns the news sentiment
+   * of a stock provided the symbol e.g IBM
+   */
+  const url = `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${symbol}&apikey=${apiKey}`
+  return new Promise((resolve, reject) => {
+    request.get(
+      {
+        url,
+        json: true,
+        headers: { 'User-Agent': 'request' },
+      },
+      (err, res, data) => {
+        if (err) {
+          logger.error(err)
+          reject(err)
+        } else if (res.statusCode !== 200) {
+          logger.error(`Status Code: ${res.statusCode}`)
+          reject(new Error(`Status Code: ${res.statusCode}`))
+        } else {
+          resolve(data)
+        }
       }
-      return { data }
-    }
-  )
-  return response
+    )
+  })
 }

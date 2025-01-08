@@ -17,28 +17,43 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
-export type DailyStockData = {
-  __typename?: 'DailyStockData';
-  close?: Maybe<Scalars['String']['output']>;
-  date?: Maybe<Scalars['String']['output']>;
-  high?: Maybe<Scalars['String']['output']>;
-  low?: Maybe<Scalars['String']['output']>;
-  open?: Maybe<Scalars['String']['output']>;
-  volume?: Maybe<Scalars['String']['output']>;
-};
-
-export type GetStockDataResponse = {
-  __typename?: 'GetStockDataResponse';
-  data?: Maybe<Array<Maybe<DailyStockData>>>;
+export type GetNewsSentimentResponse = {
+  __typename?: 'GetNewsSentimentResponse';
+  data?: Maybe<Array<Maybe<NewsSentiment>>>;
   error?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
 };
 
+export type GetStockDataResponse = {
+  __typename?: 'GetStockDataResponse';
+  data?: Maybe<Array<Maybe<StockData>>>;
+  error?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
+export type NewsSentiment = {
+  __typename?: 'NewsSentiment';
+  authors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  banner_image?: Maybe<Scalars['String']['output']>;
+  overall_sentiment_score?: Maybe<Scalars['String']['output']>;
+  summary?: Maybe<Scalars['String']['output']>;
+  time_published?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
+  verall_sentiment_label?: Maybe<Scalars['String']['output']>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  getNewsSentiment?: Maybe<GetNewsSentimentResponse>;
   getTimeSeriesDaily?: Maybe<GetStockDataResponse>;
-  getTimeSeriesWeekly: GetStockDataResponse;
+  getTimeSeriesWeekly?: Maybe<GetStockDataResponse>;
   hello: Scalars['String']['output'];
+};
+
+
+export type QueryGetNewsSentimentArgs = {
+  symbol: Scalars['String']['input'];
 };
 
 
@@ -49,6 +64,16 @@ export type QueryGetTimeSeriesDailyArgs = {
 
 export type QueryGetTimeSeriesWeeklyArgs = {
   symbol: Scalars['String']['input'];
+};
+
+export type StockData = {
+  __typename?: 'StockData';
+  close?: Maybe<Scalars['String']['output']>;
+  date?: Maybe<Scalars['String']['output']>;
+  high?: Maybe<Scalars['String']['output']>;
+  low?: Maybe<Scalars['String']['output']>;
+  open?: Maybe<Scalars['String']['output']>;
+  volume?: Maybe<Scalars['String']['output']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -124,35 +149,36 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  DailyStockData: ResolverTypeWrapper<DailyStockData>;
+  GetNewsSentimentResponse: ResolverTypeWrapper<GetNewsSentimentResponse>;
   GetStockDataResponse: ResolverTypeWrapper<GetStockDataResponse>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
+  NewsSentiment: ResolverTypeWrapper<NewsSentiment>;
   Query: ResolverTypeWrapper<{}>;
+  StockData: ResolverTypeWrapper<StockData>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
-  DailyStockData: DailyStockData;
+  GetNewsSentimentResponse: GetNewsSentimentResponse;
   GetStockDataResponse: GetStockDataResponse;
   JSON: Scalars['JSON']['output'];
+  NewsSentiment: NewsSentiment;
   Query: {};
+  StockData: StockData;
   String: Scalars['String']['output'];
 }>;
 
-export type DailyStockDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['DailyStockData'] = ResolversParentTypes['DailyStockData']> = ResolversObject<{
-  close?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  high?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  low?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  open?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  volume?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+export type GetNewsSentimentResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetNewsSentimentResponse'] = ResolversParentTypes['GetNewsSentimentResponse']> = ResolversObject<{
+  data?: Resolver<Maybe<Array<Maybe<ResolversTypes['NewsSentiment']>>>, ParentType, ContextType>;
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GetStockDataResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetStockDataResponse'] = ResolversParentTypes['GetStockDataResponse']> = ResolversObject<{
-  data?: Resolver<Maybe<Array<Maybe<ResolversTypes['DailyStockData']>>>, ParentType, ContextType>;
+  data?: Resolver<Maybe<Array<Maybe<ResolversTypes['StockData']>>>, ParentType, ContextType>;
   error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -162,16 +188,41 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'JSON';
 }
 
+export type NewsSentimentResolvers<ContextType = any, ParentType extends ResolversParentTypes['NewsSentiment'] = ResolversParentTypes['NewsSentiment']> = ResolversObject<{
+  authors?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  banner_image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  overall_sentiment_score?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  summary?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  time_published?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  verall_sentiment_label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  getNewsSentiment?: Resolver<Maybe<ResolversTypes['GetNewsSentimentResponse']>, ParentType, ContextType, RequireFields<QueryGetNewsSentimentArgs, 'symbol'>>;
   getTimeSeriesDaily?: Resolver<Maybe<ResolversTypes['GetStockDataResponse']>, ParentType, ContextType, RequireFields<QueryGetTimeSeriesDailyArgs, 'symbol'>>;
-  getTimeSeriesWeekly?: Resolver<ResolversTypes['GetStockDataResponse'], ParentType, ContextType, RequireFields<QueryGetTimeSeriesWeeklyArgs, 'symbol'>>;
+  getTimeSeriesWeekly?: Resolver<Maybe<ResolversTypes['GetStockDataResponse']>, ParentType, ContextType, RequireFields<QueryGetTimeSeriesWeeklyArgs, 'symbol'>>;
   hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
+export type StockDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockData'] = ResolversParentTypes['StockData']> = ResolversObject<{
+  close?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  high?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  low?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  open?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  volume?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = any> = ResolversObject<{
-  DailyStockData?: DailyStockDataResolvers<ContextType>;
+  GetNewsSentimentResponse?: GetNewsSentimentResponseResolvers<ContextType>;
   GetStockDataResponse?: GetStockDataResponseResolvers<ContextType>;
   JSON?: GraphQLScalarType;
+  NewsSentiment?: NewsSentimentResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  StockData?: StockDataResolvers<ContextType>;
 }>;
 
