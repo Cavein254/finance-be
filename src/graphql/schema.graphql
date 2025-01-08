@@ -3,12 +3,13 @@ scalar JSON
 
 type Query {
     hello:String!
-    getTimeSeriesDaily(symbol:String!):GetStockDataResponse!
+    getTimeSeriesDaily(symbol:String!):GetStockDataResponse
     getTimeSeriesWeekly(symbol:String!):GetStockDataResponse!
 }
 
 
 type DailyStockData {
+  date: String
   open: String
   high: String
   low: String
@@ -18,6 +19,6 @@ type DailyStockData {
 
 type GetStockDataResponse {
     success:Boolean!
-    data: DailyStockData
+    data: [DailyStockData]
     error:String
 }

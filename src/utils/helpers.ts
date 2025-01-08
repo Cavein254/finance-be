@@ -1,5 +1,6 @@
 import request from 'request'
 import dotenv from 'dotenv'
+import logger from '../logger/Logger'
 
 dotenv.config()
 
@@ -20,10 +21,10 @@ export const getTimeSeriesDaily = async (symbol: string) => {
       },
       (err, res, data) => {
         if (err) {
-          console.log(err)
+          logger.error(err)
           reject(err)
         } else if (res.statusCode !== 200) {
-          console.log(`Status Code: ${res.statusCode}`)
+          logger.error(`Status Code: ${res.statusCode}`)
           reject(new Error(`Status Code: ${res.statusCode}`))
         } else {
           resolve(data)
