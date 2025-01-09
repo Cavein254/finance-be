@@ -1,92 +1,58 @@
-import request from 'request'
-import dotenv from 'dotenv'
-import logger from '../logger/Logger'
+import yahooFinance from 'yahoo-finance2'
 
-dotenv.config()
-
-const apiKey = process.env.ALPHA_VANTAGE_API_KEY
-export const getTimeSeriesDaily = async (symbol: string) => {
-  /*
-   * This function retutns the HLOC TIME_SERIES_DAILY
-   * of a stock provided the symbol e.g IBM
-   * for the past 100 days
-   */
-  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}`
-  return new Promise((resolve, reject) => {
-    request.get(
-      {
-        url,
-        json: true,
-        headers: { 'User-Agent': 'request' },
-      },
-      (err, res, data) => {
-        if (err) {
-          logger.error(err)
-          reject(err)
-        } else if (res.statusCode !== 200) {
-          logger.error(`Status Code: ${res.statusCode}`)
-          reject(new Error(`Status Code: ${res.statusCode}`))
-        } else {
-          resolve(data)
-        }
-      }
-    )
-  })
+interface QueryOptions {
+  period1: string
+  period2?: string
+  interval?:
+    | '1mo'
+    | '1m'
+    | '2m'
+    | '5m'
+    | '15m'
+    | '30m'
+    | '60m'
+    | '90m'
+    | '1h'
+    | '1d'
+    | '5d'
+    | '1wk'
+    | '3mo'
+    | undefined
+}
+/* eslint-disable no-unused-vars */
+type GetTimeSeriesDaily = (
+  symbol: string,
+  period1: string,
+  interval:
+    | '1mo'
+    | '1m'
+    | '2m'
+    | '5m'
+    | '15m'
+    | '30m'
+    | '60m'
+    | '90m'
+    | '1h'
+    | '1d'
+    | '5d'
+    | '1wk'
+    | '3mo'
+) => Promise<any>
+/* eslint-enable no-unused-vars */
+export const getTimeSeriesDaily: GetTimeSeriesDaily = async (
+  symbol = 'AAPL',
+  period1 = '2024-01-01',
+  interval = '3mo'
+) => {
+  const queryOptions: QueryOptions = { period1, interval }
+  try {
+    const result = await yahooFinance.chart(symbol, queryOptions)
+    // TODO: Add check & save results to database
+    return result
+  } catch (err: any) {
+    // TODO: Add logger
+    throw new Error(err.message || 'An error occurred')
+  }
 }
 
-export const getTimeSeriesWeekly = async (symbol: string) => {
-  /*
-   * This function retutns the HLOC TIME_SERIES_WEEKLY
-   * of a stock provided the symbol e.g IBM
-   * for 20+ years
-   */
-  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${symbol}&apikey=${apiKey}`
-  return new Promise((resolve, reject) => {
-    request.get(
-      {
-        url,
-        json: true,
-        headers: { 'User-Agent': 'request' },
-      },
-      (err, res, data) => {
-        if (err) {
-          logger.error(err)
-          reject(err)
-        } else if (res.statusCode !== 200) {
-          logger.error(`Status Code: ${res.statusCode}`)
-          reject(new Error(`Status Code: ${res.statusCode}`))
-        } else {
-          resolve(data)
-        }
-      }
-    )
-  })
-}
-
-export const getNewsSentiment = async (symbol: string) => {
-  /*
-   * This function retutns the news sentiment
-   * of a stock provided the symbol e.g IBM
-   */
-  const url = `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${symbol}&apikey=${apiKey}`
-  return new Promise((resolve, reject) => {
-    request.get(
-      {
-        url,
-        json: true,
-        headers: { 'User-Agent': 'request' },
-      },
-      (err, res, data) => {
-        if (err) {
-          logger.error(err)
-          reject(err)
-        } else if (res.statusCode !== 200) {
-          logger.error(`Status Code: ${res.statusCode}`)
-          reject(new Error(`Status Code: ${res.statusCode}`))
-        } else {
-          resolve(data)
-        }
-      }
-    )
-  })
-}
+export default getTimeSeriesDaily

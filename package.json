@@ -46,6 +46,6 @@
     "graphql": "^16.10.0",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
-    "request": "^2.88.2"
+    "yahoo-finance2": "^2.13.3"
   }
 }

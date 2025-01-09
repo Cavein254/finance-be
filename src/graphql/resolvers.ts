@@ -1,6 +1,5 @@
 import StockResolvers from './resolvers/stock'
-import userResolvers from './resolvers/user'
 
-const resolvers = [userResolvers, StockResolvers]
+const resolvers = [StockResolvers]
 
 export default resolvers
