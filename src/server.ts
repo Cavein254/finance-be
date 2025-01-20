@@ -3,14 +3,49 @@ import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import express from 'express'
 import http from 'http'
+import * as dotenv from 'dotenv'
 import cors from 'cors'
 import { readFileSync } from 'node:fs'
-import resolvers from './graphql/resolvers'
+
+import session from 'express-session'
+import { PrismaSessionStore } from '@quixo3/prisma-session-store'
+import passport from 'passport'
+import { PrismaClient } from '@prisma/client'
 import logger from './logger/Logger'
+import resolvers from './graphql/resolvers'
+import prisma from './lib/prisma'
+import { GraphQLContext } from './types'
 
 const typeDefs = readFileSync('./src/graphql/schema.graphql', 'utf8')
 const app = express()
+
+const result = dotenv.config()
+
+if (result.error) {
+  throw result.error
+}
+
 const httpServer = http.createServer(app)
+// Add user session to db
+app.use(
+  session({
+    cookie: {
+      maxAge: 21 * 24 * 60 * 60 * 1000, // 21 days
+    },
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: new PrismaSessionStore(new PrismaClient(), {
+      checkPeriod: 2 * 60 * 1000, // ms
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+    }),
+  })
+)
+
+// Initialize passport
+app.use(passport.initialize())
+app.use(passport.session())
 
 async function startApolloServer() {
   const server = new ApolloServer({
@@ -21,14 +56,21 @@ async function startApolloServer() {
 
   await server.start()
 
-  const PORT = 4001
+  const PORT = process.env.PORT || 4001
 
   app.use(
     '/graphql',
-    cors<cors.CorsRequest>(),
+    cors<cors.CorsRequest>({
+      origin: ['*'],
+      credentials: true,
+    }),
     express.json(),
     expressMiddleware(server, {
-      context: async ({ req }) => ({ token: req.headers.token }),
+      context: async ({ req, res }): Promise<GraphQLContext> => ({
+        prisma,
+        req,
+        res,
+      }),
     })
   )
   /* eslint-disable no-promise-executor-return */
