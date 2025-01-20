@@ -15,6 +15,7 @@ import logger from './logger/Logger'
 import resolvers from './graphql/resolvers'
 import prisma from './lib/prisma'
 import { GraphQLContext } from './types'
+import authRouter from './routes/auth.routes'
 
 const typeDefs = readFileSync('./src/graphql/schema.graphql', 'utf8')
 const app = express()
@@ -73,6 +74,7 @@ async function startApolloServer() {
       }),
     })
   )
+  app.use('/', authRouter)
   /* eslint-disable no-promise-executor-return */
   await new Promise<void>(resolve =>
     httpServer.listen({ port: PORT }, () => {
