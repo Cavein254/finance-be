@@ -12,25 +12,33 @@ const typeDefs = readFileSync('./src/graphql/schema.graphql', 'utf8')
 const app = express()
 const httpServer = http.createServer(app)
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-})
-
-await server.start()
-
-const PORT = 4001
-
-app.use(
-  '/graphql',
-  cors<cors.CorsRequest>(),
-  express.json(),
-  expressMiddleware(server, {
-    context: async ({ req }) => ({ token: req.headers.token }),
+async function startApolloServer() {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
-)
 
-await new Promise<void>(resolve => httpServer.listen({ port: PORT }, resolve))
+  await server.start()
 
-logger.info(`🚀 Server serving at http://localhost:${PORT}/graphql`)
+  const PORT = 4001
+
+  app.use(
+    '/graphql',
+    cors<cors.CorsRequest>(),
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => ({ token: req.headers.token }),
+    })
+  )
+  /* eslint-disable no-promise-executor-return */
+  await new Promise<void>(resolve =>
+    httpServer.listen({ port: PORT }, () => {
+      resolve()
+    })
+  )
+  /* eslint-enable no-promise-executor-return */
+  logger.info(`🚀 Server serving at http://localhost:${PORT}/graphql`)
+}
+
+startApolloServer().catch(err => logger.error(err))
