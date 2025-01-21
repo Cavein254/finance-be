@@ -47,7 +47,7 @@ export const getTimeSeriesDaily: GetTimeSeriesDaily = async (
   const queryOptions: QueryOptions = { period1, interval }
   try {
     const result = await yahooFinance.chart(symbol, queryOptions)
-   
+
     // TODO: Add check & save results to database
     return result
   } catch (err: any) {

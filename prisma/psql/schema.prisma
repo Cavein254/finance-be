@@ -13,9 +13,6 @@ model Stock {
   name       String     @unique
   ticker     String     @unique
   stockData  StockData[]
-
-  
-  @@schema("market")
 }
 
 model StockData {
@@ -31,5 +28,4 @@ model StockData {
 
   @@unique([stockId, date])
   @@index([date], map: "idx_date")
-  @@schema("market")
 }
