@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/pgsql"
+  output   = "../../generated/pgsql"
 }
 
 datasource db {
@@ -10,9 +10,11 @@ datasource db {
 
 model Stock {
   id         String        @id @default(cuid())
-  name       String     @unique
+  name       String?     @unique
   ticker     String     @unique
   stockData  StockData[]
+
+  @@index([ticker], map: "idx_ticker")
 }
 
 model StockData {
@@ -23,9 +25,10 @@ model StockData {
   low        Float?
   close      Float?
   volume     BigInt?
+  openInt    Int?
   stockId    String
   stock      Stock     @relation(fields: [stockId], references: [id])
 
-  @@unique([stockId, date])
+  @@unique([stockId])
   @@index([date], map: "idx_date")
 }

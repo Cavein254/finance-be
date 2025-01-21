@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "StockData" ADD COLUMN     "openInt" INTEGER,
+ALTER COLUMN "volume" SET DATA TYPE DOUBLE PRECISION;
