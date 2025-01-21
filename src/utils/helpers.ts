@@ -41,12 +41,13 @@ type GetTimeSeriesDaily = (
 /* eslint-enable no-unused-vars */
 export const getTimeSeriesDaily: GetTimeSeriesDaily = async (
   symbol = 'AAPL',
-  period1 = '2024-01-01',
+  period1 = '2023-01-01',
   interval = '3mo'
 ) => {
   const queryOptions: QueryOptions = { period1, interval }
   try {
     const result = await yahooFinance.chart(symbol, queryOptions)
+   
     // TODO: Add check & save results to database
     return result
   } catch (err: any) {

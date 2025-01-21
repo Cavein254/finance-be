@@ -47,6 +47,7 @@ app.use(
 // Initialize passport
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(cors())
 
 async function startApolloServer() {
   const server = new ApolloServer({
