@@ -1,0 +1,46 @@
+services:
+  # Database
+  db:
+    image: mariadb:10.6.17-focal
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: finance
+      MYSQL_USER: cave
+    networks:
+      - mysql-phpmyadmin
+
+  postgres-fin-data:
+    image: bitnami/postgresql:17.2.0
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/bitnami/postgresql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stock_mrk_data
+    networks:
+      - postgres-pgadmin
+
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    ports:
+      - "8088:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - postgres-pgadmin
+
+networks:
+  mysql-phpmyadmin:
+  postgres-pgadmin:
+
+volumes:
+  db_data:
+  postgres_data:

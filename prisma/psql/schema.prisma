@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/pgsql"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PSQL2_URL")
+}
+
+model Stock {
+  id         String        @id @default(cuid())
+  name       String     @unique
+  ticker     String     @unique
+  stockData  StockData[]
+}
+
+model StockData {
+  id         String       @id @default(cuid())
+  date       DateTime  @db.Date
+  open       Float?
+  high       Float?
+  low        Float?
+  close      Float?
+  volume     BigInt?
+  stockId    String
+  stock      Stock     @relation(fields: [stockId], references: [id])
+
+  @@unique([stockId, date])
+  @@index([date], map: "idx_date")
+}

@@ -1,18 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                 // Specify ECMAScript target version
-    "module": "CommonJS",              // Specify module code generation
-    "strict": true,                    // Enable strict type-checking options
-    "esModuleInterop": true,           // Enables compatibility with ES6 modules
-    "skipLibCheck": true,              // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true, // Ensure file casing is consistent
-    "outDir": "./dist",                // Redirect output structure to the `dist` folder
-    "rootDir": "./src",                // Specify the root directory of input files
-    "resolveJsonModule": true,         // Enable importing JSON files
-    "typeRoots": ["./node_modules/@types"], // Specify where TypeScript looks for type definitions
-    "moduleResolution": "node",        // Use Node.js module resolution
-    "allowJs": true,                   // Allow JavaScript files to be compiled
-    "noImplicitAny": false             // Avoid errors for variables with `any` type
+    "rootDirs": ["src"],
+    "outDir": "dist",
+    "lib": ["es2020"],
+    "target": "es2020",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "types": ["node"],
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "isolatedModules": true,
   },
   "include": [
     "src/**/*"                         // Include all TypeScript files in the `src` directory

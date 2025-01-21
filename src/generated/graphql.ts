@@ -36,35 +36,30 @@ export type Scalars = {
   JSON: { input: any; output: any }
 }
 
-export type DailyStockData = {
-  __typename?: 'DailyStockData'
-  close?: Maybe<Scalars['String']['output']>
-  high?: Maybe<Scalars['String']['output']>
-  low?: Maybe<Scalars['String']['output']>
-  open?: Maybe<Scalars['String']['output']>
-  volume?: Maybe<Scalars['String']['output']>
-}
-
 export type GetStockDataResponse = {
   __typename?: 'GetStockDataResponse'
-  data?: Maybe<DailyStockData>
+  data?: Maybe<Array<Maybe<StockData>>>
   error?: Maybe<Scalars['String']['output']>
   success: Scalars['Boolean']['output']
 }
 
 export type Query = {
   __typename?: 'Query'
-  getTimeSeriesDaily: GetStockDataResponse
-  getTimeSeriesWeekly: GetStockDataResponse
-  hello: Scalars['String']['output']
+  getTimeSeriesDaily?: Maybe<Scalars['JSON']['output']>
 }
 
 export type QueryGetTimeSeriesDailyArgs = {
   symbol: Scalars['String']['input']
 }
 
-export type QueryGetTimeSeriesWeeklyArgs = {
-  symbol: Scalars['String']['input']
+export type StockData = {
+  __typename?: 'StockData'
+  close?: Maybe<Scalars['String']['output']>
+  date?: Maybe<Scalars['String']['output']>
+  high?: Maybe<Scalars['String']['output']>
+  low?: Maybe<Scalars['String']['output']>
+  open?: Maybe<Scalars['String']['output']>
+  volume?: Maybe<Scalars['String']['output']>
 }
 
 export type WithIndex<TObject> = TObject & Record<string, any>
@@ -178,34 +173,21 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>
-  DailyStockData: ResolverTypeWrapper<DailyStockData>
   GetStockDataResponse: ResolverTypeWrapper<GetStockDataResponse>
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>
   Query: ResolverTypeWrapper<{}>
+  StockData: ResolverTypeWrapper<StockData>
   String: ResolverTypeWrapper<Scalars['String']['output']>
 }>
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output']
-  DailyStockData: DailyStockData
   GetStockDataResponse: GetStockDataResponse
   JSON: Scalars['JSON']['output']
   Query: {}
+  StockData: StockData
   String: Scalars['String']['output']
-}>
-
-export type DailyStockDataResolvers<
-  ContextType = any,
-  ParentType extends
-    ResolversParentTypes['DailyStockData'] = ResolversParentTypes['DailyStockData'],
-> = ResolversObject<{
-  close?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  high?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  low?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  open?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  volume?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
 export type GetStockDataResponseResolvers<
@@ -214,7 +196,7 @@ export type GetStockDataResponseResolvers<
     ResolversParentTypes['GetStockDataResponse'] = ResolversParentTypes['GetStockDataResponse'],
 > = ResolversObject<{
   data?: Resolver<
-    Maybe<ResolversTypes['DailyStockData']>,
+    Maybe<Array<Maybe<ResolversTypes['StockData']>>>,
     ParentType,
     ContextType
   >
@@ -234,23 +216,30 @@ export type QueryResolvers<
     ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
 > = ResolversObject<{
   getTimeSeriesDaily?: Resolver<
-    ResolversTypes['GetStockDataResponse'],
+    Maybe<ResolversTypes['JSON']>,
     ParentType,
     ContextType,
     RequireFields<QueryGetTimeSeriesDailyArgs, 'symbol'>
   >
-  getTimeSeriesWeekly?: Resolver<
-    ResolversTypes['GetStockDataResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetTimeSeriesWeeklyArgs, 'symbol'>
-  >
-  hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+}>
+
+export type StockDataResolvers<
+  ContextType = any,
+  ParentType extends
+    ResolversParentTypes['StockData'] = ResolversParentTypes['StockData'],
+> = ResolversObject<{
+  close?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  high?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  low?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  open?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  volume?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
 export type Resolvers<ContextType = any> = ResolversObject<{
-  DailyStockData?: DailyStockDataResolvers<ContextType>
   GetStockDataResponse?: GetStockDataResponseResolvers<ContextType>
   JSON?: GraphQLScalarType
   Query?: QueryResolvers<ContextType>
+  StockData?: StockDataResolvers<ContextType>
 }>
