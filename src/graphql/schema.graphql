@@ -1,18 +1,23 @@
 scalar JSON
+scalar Date
+scalar BigInt
 
 
 type Query {
-    getTimeSeriesDaily(symbol:String!):JSON
+    getTimeSeriesDaily(symbol:String!):GetStockDataResponse
 }
 
 
 type StockData {
-  date: String
-  open: String
-  high: String
-  low: String
-  close: String
-  volume: String
+  id:String!
+  stockId:String
+  date: Date
+  open: Float
+  high: Float
+  low: Float
+  close: Float
+  # volume: BigInt
+  openInt: Int
 }
 
 type GetStockDataResponse {
