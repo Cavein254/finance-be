@@ -1,15 +1,42 @@
-import getTimeSeriesDaily from '../../utils/helpers'
 import logger from '../../logger/Logger'
+// eslint-disable-next-line
+import { PrismaClient as PrismaClientData } from '../../../generated/pgsql'
+import { GetStockDataResponse } from '../../generated/graphql'
 
 const StockResolvers = {
   Query: {
-    getTimeSeriesDaily: async (_parent: any, { symbol, period1, interval }) => {
+    getTimeSeriesDaily: async (
+      _parent: any,
+      { symbol }
+    ): Promise<GetStockDataResponse> => {
       try {
-        const data: any = await getTimeSeriesDaily(symbol, period1, interval)
-        return { success: true, data }
-      } catch (error) {
-        logger.error(error)
-        return { success: false, error: JSON.stringify(error) }
+        const stockName = await new PrismaClientData().stock.findFirst({
+          where: {
+            ticker: symbol,
+          },
+        })
+        if (stockName) {
+          const result = await new PrismaClientData().stockData.findMany({
+            where: {
+              stockId: stockName.id,
+            },
+          })
+
+          return {
+            success: true,
+            data: result,
+          }
+        }
+        return {
+          success: false,
+          error: '',
+        }
+      } catch (err: any) {
+        logger.error(err)
+        return {
+          success: false,
+          error: '',
+        }
       }
     },
   },
