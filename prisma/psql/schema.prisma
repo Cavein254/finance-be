@@ -29,6 +29,6 @@ model StockData {
   stockId    String
   stock      Stock     @relation(fields: [stockId], references: [id])
 
-  @@unique([stockId])
+  @@unique([stockId, date])
   @@index([date], map: "idx_date")
 }
