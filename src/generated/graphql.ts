@@ -28,11 +28,12 @@ export type GetStockDataResponse = {
 
 export type Query = {
   __typename?: 'Query';
-  getTimeSeriesDaily?: Maybe<GetStockDataResponse>;
+  getCurrentUser?: Maybe<UserDataResponse>;
+  getHistoricalData?: Maybe<GetStockDataResponse>;
 };
 
 
-export type QueryGetTimeSeriesDailyArgs = {
+export type QueryGetHistoricalDataArgs = {
   symbol: Scalars['String']['input'];
 };
 
@@ -46,6 +47,23 @@ export type StockData = {
   open?: Maybe<Scalars['Float']['output']>;
   openInt?: Maybe<Scalars['Int']['output']>;
   stockId?: Maybe<Scalars['String']['output']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  createdAt?: Maybe<Scalars['Date']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['Date']['output']>;
+};
+
+export type UserDataResponse = {
+  __typename?: 'UserDataResponse';
+  data?: Maybe<User>;
+  error?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -130,6 +148,8 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   StockData: ResolverTypeWrapper<StockData>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  User: ResolverTypeWrapper<User>;
+  UserDataResponse: ResolverTypeWrapper<UserDataResponse>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -144,6 +164,8 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   StockData: StockData;
   String: Scalars['String']['output'];
+  User: User;
+  UserDataResponse: UserDataResponse;
 }>;
 
 export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
@@ -166,7 +188,8 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  getTimeSeriesDaily?: Resolver<Maybe<ResolversTypes['GetStockDataResponse']>, ParentType, ContextType, RequireFields<QueryGetTimeSeriesDailyArgs, 'symbol'>>;
+  getCurrentUser?: Resolver<Maybe<ResolversTypes['UserDataResponse']>, ParentType, ContextType>;
+  getHistoricalData?: Resolver<Maybe<ResolversTypes['GetStockDataResponse']>, ParentType, ContextType, RequireFields<QueryGetHistoricalDataArgs, 'symbol'>>;
 }>;
 
 export type StockDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockData'] = ResolversParentTypes['StockData']> = ResolversObject<{
@@ -181,6 +204,23 @@ export type StockDataResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UserDataResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserDataResponse'] = ResolversParentTypes['UserDataResponse']> = ResolversObject<{
+  data?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = any> = ResolversObject<{
   BigInt?: GraphQLScalarType;
   Date?: GraphQLScalarType;
@@ -188,5 +228,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   JSON?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   StockData?: StockDataResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
+  UserDataResponse?: UserDataResponseResolvers<ContextType>;
 }>;
 

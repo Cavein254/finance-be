@@ -5,9 +5,22 @@ scalar BigInt
 
 type Query {
     getHistoricalData(symbol:String!):GetStockDataResponse
+    getCurrentUser:UserDataResponse
 }
 
-
+type User {
+  id:String!
+  name:String
+  image:String
+  email:String
+  createdAt: Date
+  updatedAt: Date
+}
+type UserDataResponse {
+    success:Boolean!
+    data:User
+    error:String
+}
 type StockData {
   id:String!
   stockId:String

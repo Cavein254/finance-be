@@ -32,7 +32,7 @@ authRouter.get(
       })
       res.end()
     } else {
-      res.redirect(process.env.FRONTEND_PROFILE_REDIRECT_URL as string)
+      res.redirect(process.env.FRONTEND_REDIRECT_URL as string)
       res.end()
     }
     return null
