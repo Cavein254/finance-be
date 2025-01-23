@@ -47,7 +47,12 @@ app.use(
 // Initialize passport
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(cors())
+app.use(
+  cors({
+    origin: ['http://localhost:5173'],
+    credentials: true,
+  })
+)
 
 async function startApolloServer() {
   const server = new ApolloServer({
@@ -63,7 +68,7 @@ async function startApolloServer() {
   app.use(
     '/graphql',
     cors<cors.CorsRequest>({
-      origin: ['*'],
+      origin: ['http://localhost:5173'],
       credentials: true,
     }),
     express.json(),

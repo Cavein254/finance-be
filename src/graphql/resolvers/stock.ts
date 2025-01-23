@@ -5,7 +5,7 @@ import { GetStockDataResponse } from '../../generated/graphql'
 
 const StockResolvers = {
   Query: {
-    getTimeSeriesDaily: async (
+    getHistoricalData: async (
       _parent: any,
       { symbol }
     ): Promise<GetStockDataResponse> => {
@@ -29,7 +29,7 @@ const StockResolvers = {
         }
         return {
           success: false,
-          error: '',
+          error: `Unable to load data for stock ticker ${symbol}`,
         }
       } catch (err: any) {
         logger.error(err)

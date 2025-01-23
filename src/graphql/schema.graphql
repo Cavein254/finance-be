@@ -4,7 +4,7 @@ scalar BigInt
 
 
 type Query {
-    getTimeSeriesDaily(symbol:String!):GetStockDataResponse
+    getHistoricalData(symbol:String!):GetStockDataResponse
 }
 
 
