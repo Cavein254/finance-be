@@ -20,6 +20,9 @@ const StockResolvers = {
             where: {
               stockId: stockName.id,
             },
+            orderBy: {
+              date: 'desc',
+            },
           })
 
           return {
