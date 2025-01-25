@@ -14,8 +14,8 @@ extensions:
   graphqlScalarExamples: true
 
 info:
-  title: Finance App
-  description: Free Stock Data Research
+  title: Stock Market Stimulator
+  description: Free Stock Market Data Research
   termsOfService: https://www.example.com/terms
   contact:
     name: API Support
@@ -25,7 +25,7 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   x-introItems:
-    - title: About
+    - title: Stock Market Stimulator
       description: The whole concept of this application is to provide developers with enough historical data to test their ideas for FREE. Most other sites have a restriction on the number of API calls one can make hence limiting.
 
 servers:
