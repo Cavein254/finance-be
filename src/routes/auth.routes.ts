@@ -39,4 +39,15 @@ authRouter.get(
   }
 )
 
+authRouter.get('/logout', (req, res) => {
+  res.clearCookie('credentials')
+  res.clearCookie('connect.sid')
+  req.session?.destroy(err => {
+    if (err) {
+      throw new Error(err)
+    }
+    res.redirect(process.env.FRONTEND_REDIRECT_URL as string)
+  })
+})
+
 export default authRouter

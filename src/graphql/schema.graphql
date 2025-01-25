@@ -6,8 +6,11 @@ scalar BigInt
 type Query {
     getHistoricalData(symbol:String!):GetStockDataResponse
     getCurrentUser:UserDataResponse
+    getHistoricalFirstRow:StockSingleRowResults
 }
-
+"""
+A user type object
+"""
 type User {
   id:String!
   name:String
@@ -16,11 +19,34 @@ type User {
   createdAt: Date
   updatedAt: Date
 }
+"""
+Results of a user object
+"""
+type StockSingleRow {
+  id:String!
+  name:String
+  ticker:String
+  stockData: [StockData]
+}
+"""
+Results of a all stock symbols with the most recent stock entry
+"""
+type StockSingleRowResults {
+  success:Boolean!
+    data:[StockSingleRow]
+    error:String
+}
+"""
+Results of a user object
+"""
 type UserDataResponse {
     success:Boolean!
     data:User
     error:String
 }
+"""
+This is the structure of a stock
+"""
 type StockData {
   id:String!
   stockId:String
@@ -32,7 +58,9 @@ type StockData {
   # volume: BigInt
   openInt: Int
 }
-
+"""
+The results of stocks array
+"""
 type GetStockDataResponse {
     success:Boolean!
     data: [StockData]

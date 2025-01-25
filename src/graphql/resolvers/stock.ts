@@ -42,6 +42,35 @@ const StockResolvers = {
         }
       }
     },
+    getHistoricalFirstRow: async () => {
+      try {
+        const stocks = await new PrismaClientData().stock.findMany({
+          take: 100,
+          include: {
+            stockData: {
+              take: 1,
+              orderBy: {
+                date: 'desc',
+              },
+            },
+          },
+        })
+        const stocksWithData = stocks?.filter(
+          stock => stock?.stockData.length > 0
+        )
+
+        return {
+          success: true,
+          data: stocksWithData,
+        }
+      } catch (err: any) {
+        logger.error(err)
+        return {
+          success: false,
+          error: '',
+        }
+      }
+    },
   },
 }
 

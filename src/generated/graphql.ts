@@ -30,6 +30,7 @@ export type Query = {
   __typename?: 'Query';
   getCurrentUser?: Maybe<UserDataResponse>;
   getHistoricalData?: Maybe<GetStockDataResponse>;
+  getHistoricalFirstRow?: Maybe<StockSingleRowResults>;
 };
 
 
@@ -47,6 +48,21 @@ export type StockData = {
   open?: Maybe<Scalars['Float']['output']>;
   openInt?: Maybe<Scalars['Int']['output']>;
   stockId?: Maybe<Scalars['String']['output']>;
+};
+
+export type StockSingleRow = {
+  __typename?: 'StockSingleRow';
+  id: Scalars['String']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  stockData?: Maybe<Array<Maybe<StockData>>>;
+  ticker?: Maybe<Scalars['String']['output']>;
+};
+
+export type StockSingleRowResults = {
+  __typename?: 'StockSingleRowResults';
+  data?: Maybe<Array<Maybe<StockSingleRow>>>;
+  error?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type User = {
@@ -147,6 +163,8 @@ export type ResolversTypes = ResolversObject<{
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Query: ResolverTypeWrapper<{}>;
   StockData: ResolverTypeWrapper<StockData>;
+  StockSingleRow: ResolverTypeWrapper<StockSingleRow>;
+  StockSingleRowResults: ResolverTypeWrapper<StockSingleRowResults>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
   UserDataResponse: ResolverTypeWrapper<UserDataResponse>;
@@ -163,6 +181,8 @@ export type ResolversParentTypes = ResolversObject<{
   JSON: Scalars['JSON']['output'];
   Query: {};
   StockData: StockData;
+  StockSingleRow: StockSingleRow;
+  StockSingleRowResults: StockSingleRowResults;
   String: Scalars['String']['output'];
   User: User;
   UserDataResponse: UserDataResponse;
@@ -190,6 +210,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   getCurrentUser?: Resolver<Maybe<ResolversTypes['UserDataResponse']>, ParentType, ContextType>;
   getHistoricalData?: Resolver<Maybe<ResolversTypes['GetStockDataResponse']>, ParentType, ContextType, RequireFields<QueryGetHistoricalDataArgs, 'symbol'>>;
+  getHistoricalFirstRow?: Resolver<Maybe<ResolversTypes['StockSingleRowResults']>, ParentType, ContextType>;
 }>;
 
 export type StockDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockData'] = ResolversParentTypes['StockData']> = ResolversObject<{
@@ -201,6 +222,21 @@ export type StockDataResolvers<ContextType = any, ParentType extends ResolversPa
   open?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   openInt?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   stockId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type StockSingleRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockSingleRow'] = ResolversParentTypes['StockSingleRow']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  stockData?: Resolver<Maybe<Array<Maybe<ResolversTypes['StockData']>>>, ParentType, ContextType>;
+  ticker?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type StockSingleRowResultsResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockSingleRowResults'] = ResolversParentTypes['StockSingleRowResults']> = ResolversObject<{
+  data?: Resolver<Maybe<Array<Maybe<ResolversTypes['StockSingleRow']>>>, ParentType, ContextType>;
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -228,6 +264,8 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   JSON?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   StockData?: StockDataResolvers<ContextType>;
+  StockSingleRow?: StockSingleRowResolvers<ContextType>;
+  StockSingleRowResults?: StockSingleRowResultsResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserDataResponse?: UserDataResponseResolvers<ContextType>;
 }>;
