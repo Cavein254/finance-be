@@ -1,7 +1,11 @@
 import logger from '../../logger/Logger'
 // eslint-disable-next-line
 import { PrismaClient as PrismaClientData } from '../../../generated/pgsql'
-import { GetStockDataResponse } from '../../generated/graphql'
+import {
+  GetStockDataResponse,
+  StockSingleRowResults,
+  StockSymbolsResults,
+} from '../../generated/graphql'
 
 const StockResolvers = {
   Query: {
@@ -42,7 +46,7 @@ const StockResolvers = {
         }
       }
     },
-    getHistoricalFirstRow: async () => {
+    getHistoricalFirstRow: async (): Promise<StockSingleRowResults> => {
       try {
         const stocks = await new PrismaClientData().stock.findMany({
           take: 100,
@@ -64,6 +68,21 @@ const StockResolvers = {
           data: stocksWithData,
         }
       } catch (err: any) {
+        logger.error(err)
+        return {
+          success: false,
+          error: '',
+        }
+      }
+    },
+    getAllSymbols: async (): Promise<StockSymbolsResults> => {
+      try {
+        const tickers = await new PrismaClientData().stock.findMany()
+        return {
+          success: true,
+          data: tickers,
+        }
+      } catch (err) {
         logger.error(err)
         return {
           success: false,

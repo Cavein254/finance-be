@@ -1,0 +1,33 @@
+spectaql:
+  displayAllServers: true
+
+introspection:
+  removeTrailingPeriodFromDescriptions: false
+  schemaFile: ./src/graphql/schema.graphql
+  queryNameStrategy: capitalizeFirst
+  fieldExpansionDepth: 4
+
+  spectaqlDirective:
+    enable: true
+
+extensions:
+  graphqlScalarExamples: true
+
+info:
+  title: Finance App
+  description: Free Stock Data Research
+  termsOfService: https://www.example.com/terms
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  x-introItems:
+    - title: About
+      description: The whole concept of this application is to provide developers with enough historical data to test their ideas for FREE. Most other sites have a restriction on the number of API calls one can make hence limiting.
+
+servers:
+  - url: https://staging.example.com/graphql
+    description: Staging

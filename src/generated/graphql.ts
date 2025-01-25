@@ -19,6 +19,7 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+/** The results of stocks array */
 export type GetStockDataResponse = {
   __typename?: 'GetStockDataResponse';
   data?: Maybe<Array<Maybe<StockData>>>;
@@ -28,6 +29,7 @@ export type GetStockDataResponse = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllSymbols?: Maybe<StockSymbolsResults>;
   getCurrentUser?: Maybe<UserDataResponse>;
   getHistoricalData?: Maybe<GetStockDataResponse>;
   getHistoricalFirstRow?: Maybe<StockSingleRowResults>;
@@ -38,6 +40,7 @@ export type QueryGetHistoricalDataArgs = {
   symbol: Scalars['String']['input'];
 };
 
+/** This is the structure of a stock */
 export type StockData = {
   __typename?: 'StockData';
   close?: Maybe<Scalars['Float']['output']>;
@@ -50,6 +53,7 @@ export type StockData = {
   stockId?: Maybe<Scalars['String']['output']>;
 };
 
+/** Results of a user object */
 export type StockSingleRow = {
   __typename?: 'StockSingleRow';
   id: Scalars['String']['output'];
@@ -58,6 +62,7 @@ export type StockSingleRow = {
   ticker?: Maybe<Scalars['String']['output']>;
 };
 
+/** Results of a all stock symbols with the most recent stock entry */
 export type StockSingleRowResults = {
   __typename?: 'StockSingleRowResults';
   data?: Maybe<Array<Maybe<StockSingleRow>>>;
@@ -65,6 +70,23 @@ export type StockSingleRowResults = {
   success: Scalars['Boolean']['output'];
 };
 
+/** Returns all stock ticker in the db */
+export type StockSymbolsResults = {
+  __typename?: 'StockSymbolsResults';
+  data?: Maybe<Array<Maybe<StockTicker>>>;
+  error?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
+/** A stock ticker object */
+export type StockTicker = {
+  __typename?: 'StockTicker';
+  id: Scalars['String']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  ticker?: Maybe<Scalars['String']['output']>;
+};
+
+/** A user type object */
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['Date']['output']>;
@@ -75,6 +97,7 @@ export type User = {
   updatedAt?: Maybe<Scalars['Date']['output']>;
 };
 
+/** Results of a user object */
 export type UserDataResponse = {
   __typename?: 'UserDataResponse';
   data?: Maybe<User>;
@@ -165,6 +188,8 @@ export type ResolversTypes = ResolversObject<{
   StockData: ResolverTypeWrapper<StockData>;
   StockSingleRow: ResolverTypeWrapper<StockSingleRow>;
   StockSingleRowResults: ResolverTypeWrapper<StockSingleRowResults>;
+  StockSymbolsResults: ResolverTypeWrapper<StockSymbolsResults>;
+  StockTicker: ResolverTypeWrapper<StockTicker>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
   UserDataResponse: ResolverTypeWrapper<UserDataResponse>;
@@ -183,6 +208,8 @@ export type ResolversParentTypes = ResolversObject<{
   StockData: StockData;
   StockSingleRow: StockSingleRow;
   StockSingleRowResults: StockSingleRowResults;
+  StockSymbolsResults: StockSymbolsResults;
+  StockTicker: StockTicker;
   String: Scalars['String']['output'];
   User: User;
   UserDataResponse: UserDataResponse;
@@ -208,6 +235,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  getAllSymbols?: Resolver<Maybe<ResolversTypes['StockSymbolsResults']>, ParentType, ContextType>;
   getCurrentUser?: Resolver<Maybe<ResolversTypes['UserDataResponse']>, ParentType, ContextType>;
   getHistoricalData?: Resolver<Maybe<ResolversTypes['GetStockDataResponse']>, ParentType, ContextType, RequireFields<QueryGetHistoricalDataArgs, 'symbol'>>;
   getHistoricalFirstRow?: Resolver<Maybe<ResolversTypes['StockSingleRowResults']>, ParentType, ContextType>;
@@ -240,6 +268,20 @@ export type StockSingleRowResultsResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type StockSymbolsResultsResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockSymbolsResults'] = ResolversParentTypes['StockSymbolsResults']> = ResolversObject<{
+  data?: Resolver<Maybe<Array<Maybe<ResolversTypes['StockTicker']>>>, ParentType, ContextType>;
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type StockTickerResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockTicker'] = ResolversParentTypes['StockTicker']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ticker?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -266,6 +308,8 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   StockData?: StockDataResolvers<ContextType>;
   StockSingleRow?: StockSingleRowResolvers<ContextType>;
   StockSingleRowResults?: StockSingleRowResultsResolvers<ContextType>;
+  StockSymbolsResults?: StockSymbolsResultsResolvers<ContextType>;
+  StockTicker?: StockTickerResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserDataResponse?: UserDataResponseResolvers<ContextType>;
 }>;
