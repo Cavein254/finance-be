@@ -4,10 +4,48 @@ scalar BigInt
 
 
 type Query {
-    getHistoricalData(symbol:String!):GetStockDataResponse
+    # user 
     getCurrentUser:UserDataResponse
+    getMyPortfolio:GetPortfolioResults
+
+    #stocks
+    getHistoricalData(symbol:String!):GetStockDataResponse
     getHistoricalFirstRow:StockSingleRowResults
     getAllSymbols:StockSymbolsResults
+}
+
+"""
+Return for user portfolios
+"""
+type GetPortfolioResults {
+    success:Boolean!
+    data:[Portfolio]
+    error:String
+}
+"""
+A stock object
+"""
+type Stock {
+  id:String!
+  name: String
+  ticker: String
+  quantity: Float
+  purchasePrice: Float
+  currentPrice: Float
+  lastUpdated: Date
+}
+"""
+A Portfolio object
+"""
+type Portfolio {
+  id:String!
+  name:String
+  description: String
+  totalInvestment: Float
+  stocks:[Stock]
+  user:User
+  createdAt: Date
+  updatedAt: Date
 }
 """
 A stock ticker object
@@ -21,7 +59,7 @@ type StockTicker {
 Returns all stock ticker in the db
 """
 type StockSymbolsResults {
-  success:Boolean!
+    success:Boolean!
     data:[StockTicker]
     error:String
 }

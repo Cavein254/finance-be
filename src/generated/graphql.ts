@@ -19,6 +19,14 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+/** Return for user portfolios */
+export type GetPortfolioResults = {
+  __typename?: 'GetPortfolioResults';
+  data?: Maybe<Array<Maybe<Portfolio>>>;
+  error?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
 /** The results of stocks array */
 export type GetStockDataResponse = {
   __typename?: 'GetStockDataResponse';
@@ -27,17 +35,43 @@ export type GetStockDataResponse = {
   success: Scalars['Boolean']['output'];
 };
 
+/** A Portfolio object */
+export type Portfolio = {
+  __typename?: 'Portfolio';
+  createdAt?: Maybe<Scalars['Date']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  stocks?: Maybe<Array<Maybe<Stock>>>;
+  totalInvestment?: Maybe<Scalars['Float']['output']>;
+  updatedAt?: Maybe<Scalars['Date']['output']>;
+  user?: Maybe<User>;
+};
+
 export type Query = {
   __typename?: 'Query';
   getAllSymbols?: Maybe<StockSymbolsResults>;
   getCurrentUser?: Maybe<UserDataResponse>;
   getHistoricalData?: Maybe<GetStockDataResponse>;
   getHistoricalFirstRow?: Maybe<StockSingleRowResults>;
+  getMyPortfolio?: Maybe<GetPortfolioResults>;
 };
 
 
 export type QueryGetHistoricalDataArgs = {
   symbol: Scalars['String']['input'];
+};
+
+/** A stock object */
+export type Stock = {
+  __typename?: 'Stock';
+  currentPrice?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['String']['output'];
+  lastUpdated?: Maybe<Scalars['Date']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  purchasePrice?: Maybe<Scalars['Float']['output']>;
+  quantity?: Maybe<Scalars['Float']['output']>;
+  ticker?: Maybe<Scalars['String']['output']>;
 };
 
 /** This is the structure of a stock */
@@ -181,10 +215,13 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Date: ResolverTypeWrapper<Scalars['Date']['output']>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  GetPortfolioResults: ResolverTypeWrapper<GetPortfolioResults>;
   GetStockDataResponse: ResolverTypeWrapper<GetStockDataResponse>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
+  Portfolio: ResolverTypeWrapper<Portfolio>;
   Query: ResolverTypeWrapper<{}>;
+  Stock: ResolverTypeWrapper<Stock>;
   StockData: ResolverTypeWrapper<StockData>;
   StockSingleRow: ResolverTypeWrapper<StockSingleRow>;
   StockSingleRowResults: ResolverTypeWrapper<StockSingleRowResults>;
@@ -201,10 +238,13 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
   Date: Scalars['Date']['output'];
   Float: Scalars['Float']['output'];
+  GetPortfolioResults: GetPortfolioResults;
   GetStockDataResponse: GetStockDataResponse;
   Int: Scalars['Int']['output'];
   JSON: Scalars['JSON']['output'];
+  Portfolio: Portfolio;
   Query: {};
+  Stock: Stock;
   StockData: StockData;
   StockSingleRow: StockSingleRow;
   StockSingleRowResults: StockSingleRowResults;
@@ -223,6 +263,13 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Date';
 }
 
+export type GetPortfolioResultsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetPortfolioResults'] = ResolversParentTypes['GetPortfolioResults']> = ResolversObject<{
+  data?: Resolver<Maybe<Array<Maybe<ResolversTypes['Portfolio']>>>, ParentType, ContextType>;
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type GetStockDataResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetStockDataResponse'] = ResolversParentTypes['GetStockDataResponse']> = ResolversObject<{
   data?: Resolver<Maybe<Array<Maybe<ResolversTypes['StockData']>>>, ParentType, ContextType>;
   error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -234,11 +281,35 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'JSON';
 }
 
+export type PortfolioResolvers<ContextType = any, ParentType extends ResolversParentTypes['Portfolio'] = ResolversParentTypes['Portfolio']> = ResolversObject<{
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  stocks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Stock']>>>, ParentType, ContextType>;
+  totalInvestment?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   getAllSymbols?: Resolver<Maybe<ResolversTypes['StockSymbolsResults']>, ParentType, ContextType>;
   getCurrentUser?: Resolver<Maybe<ResolversTypes['UserDataResponse']>, ParentType, ContextType>;
   getHistoricalData?: Resolver<Maybe<ResolversTypes['GetStockDataResponse']>, ParentType, ContextType, RequireFields<QueryGetHistoricalDataArgs, 'symbol'>>;
   getHistoricalFirstRow?: Resolver<Maybe<ResolversTypes['StockSingleRowResults']>, ParentType, ContextType>;
+  getMyPortfolio?: Resolver<Maybe<ResolversTypes['GetPortfolioResults']>, ParentType, ContextType>;
+}>;
+
+export type StockResolvers<ContextType = any, ParentType extends ResolversParentTypes['Stock'] = ResolversParentTypes['Stock']> = ResolversObject<{
+  currentPrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lastUpdated?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  purchasePrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  quantity?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  ticker?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type StockDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockData'] = ResolversParentTypes['StockData']> = ResolversObject<{
@@ -302,9 +373,12 @@ export type UserDataResponseResolvers<ContextType = any, ParentType extends Reso
 export type Resolvers<ContextType = any> = ResolversObject<{
   BigInt?: GraphQLScalarType;
   Date?: GraphQLScalarType;
+  GetPortfolioResults?: GetPortfolioResultsResolvers<ContextType>;
   GetStockDataResponse?: GetStockDataResponseResolvers<ContextType>;
   JSON?: GraphQLScalarType;
+  Portfolio?: PortfolioResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Stock?: StockResolvers<ContextType>;
   StockData?: StockDataResolvers<ContextType>;
   StockSingleRow?: StockSingleRowResolvers<ContextType>;
   StockSingleRowResults?: StockSingleRowResultsResolvers<ContextType>;
