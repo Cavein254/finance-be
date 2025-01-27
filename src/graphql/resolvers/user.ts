@@ -50,6 +50,9 @@ const UserResolver = {
           }
         }
         const portfolios = await new PrismaClient().portfolio.findMany({
+          where: {
+            userId: currUser?.id,
+          },
           include: {
             stocks: true,
           },
@@ -84,7 +87,6 @@ const UserResolver = {
         const portfolio = await new PrismaClient().portfolio.create({
           data: arg.input,
         })
-        console.log(portfolio)
         if (!portfolio) {
           return {
             success: false,
@@ -116,7 +118,6 @@ const UserResolver = {
         }
       }
       const { input }: { input: CreateStockEntry } = arg
-      console.log(input)
       const {
         name,
         ticker,
@@ -148,32 +149,31 @@ const UserResolver = {
             success: true,
             message: ` Porfolio ${stockEntry.name} updated successfully!`,
           }
-        } else {
-          const stockEntry = await new PrismaClient().stock.create({
-            data: {
-              name,
-              ticker,
-              quantity,
-              purchaseDate,
-              totalValue,
-              currentPrice,
-              portfolio: {
-                connect: {
-                  id: portfolioId,
-                },
+        }
+        const stockEntry = await new PrismaClient().stock.create({
+          data: {
+            name,
+            ticker,
+            quantity,
+            purchaseDate,
+            totalValue,
+            currentPrice,
+            portfolio: {
+              connect: {
+                id: portfolioId,
               },
             },
-          })
-          if (!stockEntry) {
-            return {
-              success: false,
-              message: 'Unable to create user portfolio',
-            }
-          }
+          },
+        })
+        if (!stockEntry) {
           return {
-            success: true,
-            message: ` Porfolio ${stockEntry.name} created successfully!`,
+            success: false,
+            message: 'Unable to create user portfolio',
           }
+        }
+        return {
+          success: true,
+          message: ` Porfolio ${stockEntry.name} created successfully!`,
         }
       } catch (err) {
         logger.error(err)
