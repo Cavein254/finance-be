@@ -44,7 +44,11 @@ const UserResolver = {
             error: 'Unauthorized user!',
           }
         }
-        const portfolios = await new PrismaClient().portfolio.findMany()
+        const portfolios = await new PrismaClient().portfolio.findMany({
+          include: {
+            stocks: true,
+          },
+        })
         return {
           success: true,
           data: portfolios,

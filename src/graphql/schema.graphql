@@ -14,6 +14,40 @@ type Query {
     getAllSymbols:StockSymbolsResults
 }
 
+type Mutation {
+  createPortfolio(input:CreatePortfolio):CreateResponse
+  createStockEntry(input:CreateStockEntry):CreateResponse
+}
+"""
+Input for creating a new Stock Entry
+"""
+input CreateStockEntry {
+  name: String!
+  ticker: String!
+  quantity: Float
+  purchasePrice: Float
+  currentPrice: Float!
+  totalValue: Float!
+  purchaseDate: String
+  portfolioId: String!
+}
+"""
+Response after creating a portfolio
+"""
+type CreateResponse {
+  success:String
+  error:String
+  message:String
+}
+"""
+Input for creating a new Portfolio
+"""
+input CreatePortfolio {
+  name:String!
+  description:String
+  totalInvestment: Float
+  userId:String!
+}
 """
 Return for user portfolios
 """

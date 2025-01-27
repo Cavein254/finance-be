@@ -19,6 +19,34 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+/** Input for creating a new Portfolio */
+export type CreatePortfolio = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  totalInvestment?: InputMaybe<Scalars['Float']['input']>;
+  userId: Scalars['String']['input'];
+};
+
+/** Response after creating a portfolio */
+export type CreateResponse = {
+  __typename?: 'CreateResponse';
+  error?: Maybe<Scalars['String']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+  success?: Maybe<Scalars['String']['output']>;
+};
+
+/** Input for creating a new Stock Entry */
+export type CreateStockEntry = {
+  currentPrice: Scalars['Float']['input'];
+  name: Scalars['String']['input'];
+  portfolioId: Scalars['String']['input'];
+  purchaseDate?: InputMaybe<Scalars['String']['input']>;
+  purchasePrice?: InputMaybe<Scalars['Float']['input']>;
+  quantity?: InputMaybe<Scalars['Float']['input']>;
+  ticker: Scalars['String']['input'];
+  totalValue: Scalars['Float']['input'];
+};
+
 /** Return for user portfolios */
 export type GetPortfolioResults = {
   __typename?: 'GetPortfolioResults';
@@ -33,6 +61,22 @@ export type GetStockDataResponse = {
   data?: Maybe<Array<Maybe<StockData>>>;
   error?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createPortfolio?: Maybe<CreateResponse>;
+  createStockEntry?: Maybe<CreateResponse>;
+};
+
+
+export type MutationCreatePortfolioArgs = {
+  input?: InputMaybe<CreatePortfolio>;
+};
+
+
+export type MutationCreateStockEntryArgs = {
+  input?: InputMaybe<CreateStockEntry>;
 };
 
 /** A Portfolio object */
@@ -213,12 +257,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreatePortfolio: CreatePortfolio;
+  CreateResponse: ResolverTypeWrapper<CreateResponse>;
+  CreateStockEntry: CreateStockEntry;
   Date: ResolverTypeWrapper<Scalars['Date']['output']>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   GetPortfolioResults: ResolverTypeWrapper<GetPortfolioResults>;
   GetStockDataResponse: ResolverTypeWrapper<GetStockDataResponse>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Portfolio: ResolverTypeWrapper<Portfolio>;
   Query: ResolverTypeWrapper<{}>;
   Stock: ResolverTypeWrapper<Stock>;
@@ -236,12 +284,16 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   BigInt: Scalars['BigInt']['output'];
   Boolean: Scalars['Boolean']['output'];
+  CreatePortfolio: CreatePortfolio;
+  CreateResponse: CreateResponse;
+  CreateStockEntry: CreateStockEntry;
   Date: Scalars['Date']['output'];
   Float: Scalars['Float']['output'];
   GetPortfolioResults: GetPortfolioResults;
   GetStockDataResponse: GetStockDataResponse;
   Int: Scalars['Int']['output'];
   JSON: Scalars['JSON']['output'];
+  Mutation: {};
   Portfolio: Portfolio;
   Query: {};
   Stock: Stock;
@@ -258,6 +310,13 @@ export type ResolversParentTypes = ResolversObject<{
 export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
   name: 'BigInt';
 }
+
+export type CreateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateResponse'] = ResolversParentTypes['CreateResponse']> = ResolversObject<{
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
@@ -280,6 +339,11 @@ export type GetStockDataResponseResolvers<ContextType = any, ParentType extends 
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON';
 }
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createPortfolio?: Resolver<Maybe<ResolversTypes['CreateResponse']>, ParentType, ContextType, Partial<MutationCreatePortfolioArgs>>;
+  createStockEntry?: Resolver<Maybe<ResolversTypes['CreateResponse']>, ParentType, ContextType, Partial<MutationCreateStockEntryArgs>>;
+}>;
 
 export type PortfolioResolvers<ContextType = any, ParentType extends ResolversParentTypes['Portfolio'] = ResolversParentTypes['Portfolio']> = ResolversObject<{
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -372,10 +436,12 @@ export type UserDataResponseResolvers<ContextType = any, ParentType extends Reso
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   BigInt?: GraphQLScalarType;
+  CreateResponse?: CreateResponseResolvers<ContextType>;
   Date?: GraphQLScalarType;
   GetPortfolioResults?: GetPortfolioResultsResolvers<ContextType>;
   GetStockDataResponse?: GetStockDataResponseResolvers<ContextType>;
   JSON?: GraphQLScalarType;
+  Mutation?: MutationResolvers<ContextType>;
   Portfolio?: PortfolioResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Stock?: StockResolvers<ContextType>;
