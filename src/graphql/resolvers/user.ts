@@ -1,4 +1,9 @@
-import { GetPortfolioResults, UserDataResponse } from '../../generated/graphql'
+import {
+  CreateResponse,
+  CreateStockEntry,
+  GetPortfolioResults,
+  UserDataResponse,
+} from '../../generated/graphql'
 import logger from '../../logger/Logger'
 import { GraphQLContext } from '../../types'
 // eslint-disable-next-line
@@ -52,6 +57,123 @@ const UserResolver = {
         return {
           success: true,
           data: portfolios,
+        }
+      } catch (err) {
+        logger.error(err)
+        return {
+          success: false,
+          error: JSON.stringify(err),
+        }
+      }
+    },
+  },
+  Mutation: {
+    createPortfolio: async (
+      _parent: any,
+      arg: any,
+      ctx: GraphQLContext
+    ): Promise<CreateResponse> => {
+      const currUser = await ctx.req.user
+      if (!currUser) {
+        return {
+          success: false,
+          error: 'Unauthorized user!',
+        }
+      }
+      try {
+        const portfolio = await new PrismaClient().portfolio.create({
+          data: arg.input,
+        })
+        console.log(portfolio)
+        if (!portfolio) {
+          return {
+            success: false,
+            message: 'Unable to create user portfolio',
+          }
+        }
+        return {
+          success: true,
+          message: ` Porfolio ${portfolio.name} created successfully!`,
+        }
+      } catch (err) {
+        logger.error(err)
+        return {
+          success: false,
+          error: JSON.stringify(err),
+        }
+      }
+    },
+    createStockEntry: async (
+      _parent: any,
+      arg: any,
+      ctx: GraphQLContext
+    ): Promise<CreateResponse> => {
+      const currUser = await ctx.req.user
+      if (!currUser) {
+        return {
+          success: false,
+          error: 'Unauthorized user!',
+        }
+      }
+      const { input }: { input: CreateStockEntry } = arg
+      console.log(input)
+      const {
+        name,
+        ticker,
+        quantity,
+        purchaseDate,
+        totalValue,
+        currentPrice,
+        portfolioId,
+      } = input
+      try {
+        const existingStock = await new PrismaClient().stock.findUnique({
+          where: { ticker },
+        })
+
+        if (existingStock) {
+          const stockEntry = await new PrismaClient().stock.update({
+            where: { ticker },
+            data: {
+              name,
+              ticker,
+              quantity,
+              purchaseDate,
+              totalValue,
+              currentPrice,
+              portfolioId,
+            },
+          })
+          return {
+            success: true,
+            message: ` Porfolio ${stockEntry.name} updated successfully!`,
+          }
+        } else {
+          const stockEntry = await new PrismaClient().stock.create({
+            data: {
+              name,
+              ticker,
+              quantity,
+              purchaseDate,
+              totalValue,
+              currentPrice,
+              portfolio: {
+                connect: {
+                  id: portfolioId,
+                },
+              },
+            },
+          })
+          if (!stockEntry) {
+            return {
+              success: false,
+              message: 'Unable to create user portfolio',
+            }
+          }
+          return {
+            success: true,
+            message: ` Porfolio ${stockEntry.name} created successfully!`,
+          }
         }
       } catch (err) {
         logger.error(err)

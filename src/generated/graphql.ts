@@ -32,7 +32,7 @@ export type CreateResponse = {
   __typename?: 'CreateResponse';
   error?: Maybe<Scalars['String']['output']>;
   message?: Maybe<Scalars['String']['output']>;
-  success?: Maybe<Scalars['String']['output']>;
+  success?: Maybe<Scalars['Boolean']['output']>;
 };
 
 /** Input for creating a new Stock Entry */
@@ -314,7 +314,7 @@ export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type CreateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateResponse'] = ResolversParentTypes['CreateResponse']> = ResolversObject<{
   error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  success?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

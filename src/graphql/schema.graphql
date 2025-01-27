@@ -35,7 +35,7 @@ input CreateStockEntry {
 Response after creating a portfolio
 """
 type CreateResponse {
-  success:String
+  success:Boolean
   error:String
   message:String
 }
