@@ -1,20 +1,155 @@
 scalar JSON
+scalar Date
+scalar BigInt
 
 
 type Query {
-    getTimeSeriesDaily(symbol:String!):JSON
+    # user 
+    getCurrentUser:UserDataResponse
+    getMyPortfolio:GetPortfolioResults
+
+    #stocks
+    getHistoricalData(symbol:String!):GetStockDataResponse
+    getHistoricalFirstRow:StockSingleRowResults
+    getAllSymbols:StockSymbolsResults
 }
 
-
+type Mutation {
+  createPortfolio(input:CreatePortfolio):CreateResponse
+  createStockEntry(input:CreateStockEntry):CreateResponse
+}
+"""
+Input for creating a new Stock Entry
+"""
+input CreateStockEntry {
+  name: String!
+  ticker: String!
+  quantity: Float
+  purchasePrice: Float
+  currentPrice: Float!
+  totalValue: Float!
+  purchaseDate: String
+  portfolioId: String!
+}
+"""
+Response after creating a portfolio
+"""
+type CreateResponse {
+  success:Boolean
+  error:String
+  message:String
+}
+"""
+Input for creating a new Portfolio
+"""
+input CreatePortfolio {
+  name:String!
+  description:String
+  totalInvestment: Float
+  userId:String!
+}
+"""
+Return for user portfolios
+"""
+type GetPortfolioResults {
+    success:Boolean!
+    data:[Portfolio]
+    error:String
+}
+"""
+A stock object
+"""
+type Stock {
+  id:String!
+  name: String
+  ticker: String
+  quantity: Float
+  purchasePrice: Float
+  currentPrice: Float
+  lastUpdated: Date
+}
+"""
+A Portfolio object
+"""
+type Portfolio {
+  id:String!
+  name:String
+  description: String
+  totalInvestment: Float
+  stocks:[Stock]
+  user:User
+  createdAt: Date
+  updatedAt: Date
+}
+"""
+A stock ticker object
+"""
+type StockTicker {
+  id:String!
+  name:String
+  ticker:String
+}
+"""
+Returns all stock ticker in the db
+"""
+type StockSymbolsResults {
+    success:Boolean!
+    data:[StockTicker]
+    error:String
+}
+"""
+A user type object
+"""
+type User {
+  id:String!
+  name:String
+  image:String
+  email:String
+  createdAt: Date
+  updatedAt: Date
+}
+"""
+Results of a user object
+"""
+type StockSingleRow {
+  id:String!
+  name:String
+  ticker:String
+  stockData: [StockData]
+}
+"""
+Results of a all stock symbols with the most recent stock entry
+"""
+type StockSingleRowResults {
+    success:Boolean!
+    data:[StockSingleRow]
+    error:String
+}
+"""
+Results of a user object
+"""
+type UserDataResponse {
+    success:Boolean!
+    data:User
+    error:String
+}
+"""
+This is the structure of a stock
+"""
 type StockData {
-  date: String
-  open: String
-  high: String
-  low: String
-  close: String
-  volume: String
+  id:String!
+  stockId:String
+  date: Date
+  open: Float
+  high: Float
+  low: Float
+  close: Float
+  # volume: BigInt
+  openInt: Int
 }
-
+"""
+The results of stocks array
+"""
 type GetStockDataResponse {
     success:Boolean!
     data: [StockData]

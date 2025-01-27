@@ -10,7 +10,9 @@
     "test": "jest --passWithNoTests",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prepare": "husky",
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "load-data": "tsx src/utils/stockdb.ts",
+    "docs-generate": "npx spectaql config.yml"
   },
   "keywords": [
     "finance",
@@ -48,6 +50,7 @@
     "@quixo3/prisma-session-store": "^3.1.13",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "csv-parser": "^3.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-session": "^1.18.1",

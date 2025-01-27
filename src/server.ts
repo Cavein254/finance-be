@@ -11,6 +11,7 @@ import session from 'express-session'
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
 import passport from 'passport'
 import { PrismaClient } from '@prisma/client'
+import path from 'node:path'
 import logger from './logger/Logger'
 import resolvers from './graphql/resolvers'
 import prisma from './lib/prisma'
@@ -25,7 +26,8 @@ const result = dotenv.config()
 if (result.error) {
   throw result.error
 }
-
+// eslint-disable-next-line no-underscore-dangle
+const __dirname = process.env.PWD
 const httpServer = http.createServer(app)
 // Add user session to db
 app.use(
@@ -47,7 +49,12 @@ app.use(
 // Initialize passport
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(cors())
+app.use(
+  cors({
+    origin: ['http://localhost:5173'],
+    credentials: true,
+  })
+)
 
 async function startApolloServer() {
   const server = new ApolloServer({
@@ -63,7 +70,7 @@ async function startApolloServer() {
   app.use(
     '/graphql',
     cors<cors.CorsRequest>({
-      origin: ['*'],
+      origin: ['http://localhost:5173'],
       credentials: true,
     }),
     express.json(),
@@ -76,6 +83,11 @@ async function startApolloServer() {
     })
   )
   app.use('/', authRouter)
+  // eslint-disable-next-line no-underscore-dangle
+  app.use('/static', express.static(path.join(__dirname, 'public/')))
+  app.get('/api/docs', (req, res) => {
+    res.sendFile(`${__dirname}/public/index.html`)
+  })
   /* eslint-disable no-promise-executor-return */
   await new Promise<void>(resolve =>
     httpServer.listen({ port: PORT }, () => {
